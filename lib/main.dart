@@ -13,33 +13,34 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Chat',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
-        backgroundColor: Colors.pink,
-        accentColor: Colors.purple,
+        primarySwatch: Colors.lightBlue,
+        backgroundColor: Colors.lightBlue,
+        accentColor: Colors.blue,
         accentColorBrightness: Brightness.dark,
         buttonTheme: ButtonTheme.of(context).copyWith(
-          buttonColor: Colors.pink,
+          buttonColor: Colors.lightBlue,
           textTheme: ButtonTextTheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius : BorderRadius.circular(20)
           )
         )
       ),
-      home: StreamBuilder(
+       home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged, 
         builder: ( (ctx, userSnapshot) {
-          if(userSnapshot.connectionState == ConnectionState.waiting)
-          {
-            return SplashScreen();
-          }
+          // if(userSnapshot.connectionState == ConnectionState.waiting)
+          // {
+          //   return SplashScreen();
+          // }
           if(userSnapshot.hasData)
           {
             return ChatScreen();
           }
-          return AuthScreen();
+          //return AuthScreen();
+          return SplashScreen();
         })
       ),
-    );
+     );
   }
 }
 
