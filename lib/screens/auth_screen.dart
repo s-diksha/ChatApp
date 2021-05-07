@@ -1,3 +1,4 @@
+import 'package:chatapp/screens/chatListScreen.dart';
 import 'package:chatapp/widgets/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
   var _isLoading = false;
 
-   void _submitAuthForm(String email, 
+   void _submitAuthForm(
+     String email, 
    String username, 
    String password,
     bool isLogin,
@@ -32,14 +34,22 @@ class _AuthScreenState extends State<AuthScreen> {
           if(isLogin)
         {
           result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+          print("Result log in is ");
+          print(result.user);
+          if(result != null)
+          ChatListScreen(username);
         }
         else
         {
           result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
           Firestore.instance.collection('users').document(result.user.uid).setData({
+            'email' : email,
             'username' : username,
-            'email' : email
+            'password' : password
           });
+          print("result sign up is");
+          print(result);
+          //ChatListScreen(username);
         }
       }
       catch(err)
@@ -53,12 +63,12 @@ class _AuthScreenState extends State<AuthScreen> {
           message = err.message;
         }
 
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-          backgroundColor: Theme.of(context).errorColor,
-          )
-        );
+        // Scaffold.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(message),
+        //   backgroundColor: Theme.of(context).errorColor,
+        //   )
+        //);
       }
         
   }
@@ -66,7 +76,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: new Color(0xff4682B4),
       body: AuthForm(_submitAuthForm, _isLoading),
     );
   }

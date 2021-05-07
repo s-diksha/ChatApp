@@ -1,4 +1,5 @@
 import 'package:chatapp/screens/auth_screen.dart';
+import 'package:chatapp/screens/chatListScreen.dart';
 import 'package:chatapp/screens/chat_screen.dart';
 import 'package:chatapp/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Chat',
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        primarySwatch: Colors.blue,
         backgroundColor: Colors.lightBlue,
         accentColor: Colors.blue,
         accentColorBrightness: Brightness.dark,
@@ -34,7 +36,10 @@ class MyApp extends StatelessWidget {
           // }
           if(userSnapshot.hasData)
           {
-            return ChatScreen();
+            print("User snap data");
+            print(userSnapshot.data);
+            //return ChatScreen();
+            //return ChatListScreen("sdiksha");
           }
           //return AuthScreen();
           return SplashScreen();
