@@ -2,13 +2,35 @@ import 'package:chatapp/screens/auth_screen.dart';
 import 'package:chatapp/screens/chatListScreen.dart';
 import 'package:chatapp/screens/chat_screen.dart';
 import 'package:chatapp/screens/splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    var uid ;
+
+  Future<String> inputData() async {
+    final FirebaseUser user = await auth.currentUser();
+     uid = user.uid;
+     print("User snap data");
+      print(uid);
+      final userData = await Firestore.instance.collection('users').document(uid).get();
+     
+
+  }
+
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,25 +51,32 @@ class MyApp extends StatelessWidget {
       ),
        home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged, 
-        builder: ( (ctx, userSnapshot) {
+        builder: ( (ctx, userSnapshot){
           // if(userSnapshot.connectionState == ConnectionState.waiting)
           // {
           //   return SplashScreen();
           // }
-          if(userSnapshot.hasData)
-          {
-            print("User snap data");
-            print(userSnapshot.data);
-            //return ChatScreen();
-            //return ChatListScreen("sdiksha");
-          }
-          //return AuthScreen();
-          return SplashScreen();
+          // else
+          // {
+            if(userSnapshot.hasData)
+            {
+              return ChatScreen();
+            }
+          return AuthScreen();
+                
+          //}
+            
+          
         })
       ),
      );
+
+  
   }
+
+   
 }
+
 
 
 
